@@ -1,0 +1,6 @@
+{
+  "name": "Easy Trust Corporation (ETC)",
+  "description": "Easy Trust Corporation is a diversified company operating across Agriculture, Transportation, Procurement & Logistics, and Real Estate, delivering reliable solutions and lasting value.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

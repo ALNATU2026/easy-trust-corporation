@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="etcBlueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0066CC" />
+      <stop offset="60%" stop-color="#004AAD" />
+      <stop offset="100%" stop-color="#062B5C" />
+    </linearGradient>
+    <linearGradient id="etcGreenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#20C84A" />
+      <stop offset="50%" stop-color="#0A9F3D" />
+      <stop offset="100%" stop-color="#087A32" />
+    </linearGradient>
+    <linearGradient id="etcGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+    <filter id="subtleShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.18" flood-color="#062B5C" />
+    </filter>
+  </defs>
+
+  <!-- EMBLEM ICON (Left) -->
+  <g transform="translate(10, 10)" filter="url(#subtleShadow)">
+    <!-- Base Circular Shield Outer Ring Glow -->
+    <circle cx="50" cy="50" r="48" fill="#F4F8FC" stroke="#E2E8F0" stroke-width="1.5" />
+    
+    <!-- Outer Blue Swoosh (Trust & Stability Arc) -->
+    <path d="M 50 8 A 42 42 0 0 1 92 50 C 92 65 83 78 70 86 C 65 78 68 64 68 52 C 68 36 58 24 50 18 Z" 
+          fill="url(#etcBlueGrad)" />
+    
+    <!-- Inner Green Growth Swoosh (Agriculture & Sustainability) -->
+    <path d="M 50 92 A 42 42 0 0 1 8 50 C 8 35 17 22 30 14 C 35 22 32 36 32 48 C 32 64 42 76 50 82 Z" 
+          fill="url(#etcGreenGrad)" />
+
+    <!-- Dynamic Central Interlocking Crest (The Pillars of Excellence) -->
+    <path d="M 36 34 C 36 28 42 22 50 22 C 58 22 64 28 64 34 L 64 48 C 64 54 58 60 50 60 C 42 60 36 54 36 48 Z" 
+          fill="#062B5C" />
+    
+    <!-- Central Rising Green Leaf / Spire -->
+    <path d="M 50 28 C 55 35 56 46 50 56 C 44 46 45 35 50 28 Z" 
+          fill="url(#etcGreenGrad)" />
+
+    <!-- Center Monogram "ETC" Core -->
+    <circle cx="50" cy="50" r="14" fill="#FFFFFF" />
+    <path d="M 44 46 L 56 46 M 50 46 L 50 54 M 46 54 L 54 54" stroke="#004AAD" stroke-width="2.5" stroke-linecap="round" />
+    
+    <!-- Star/Diamond of Excellence -->
+    <polygon points="50,11 52,15 56,15 53,18 54,22 50,19 46,22 47,18 44,15 48,15" fill="#20C84A" />
+  </g>
+
+  <!-- TEXT BRANDING (Right) -->
+  <g transform="translate(125, 20)">
+    <!-- Top Primary Name -->
+    <text x="0" y="38" font-family="'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif" font-weight="800" font-size="28" fill="#062B5C" letter-spacing="0.5">
+      EASY TRUST
+    </text>
+    <text x="175" y="38" font-family="'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif" font-weight="800" font-size="28" fill="#0A9F3D" letter-spacing="0.5">
+      CORPORATION
+    </text>
+    
+    <!-- Acronym Badge -->
+    <g transform="translate(378, 17)">
+      <rect width="48" height="23" rx="6" fill="#062B5C" />
+      <text x="24" y="16" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-weight="800" font-size="12" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">
+        ETC
+      </text>
+    </g>
+
+    <!-- Divider Line -->
+    <rect x="0" y="49" width="370" height="2" fill="url(#etcGreenGrad)" rx="1" />
+
+    <!-- Slogan / Subtitle -->
+    <text x="0" y="68" font-family="'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif" font-weight="600" font-size="13" fill="#004AAD" letter-spacing="1.8">
+      BUILDING TRUST. DELIVERING EXCELLENCE.
+    </text>
+  </g>
+</svg>
