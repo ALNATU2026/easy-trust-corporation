@@ -7,9 +7,10 @@ import { motion } from 'motion/react';
 
 interface ServicesProps {
   onOpenDetails: (service: ServiceItem) => void;
+  onNavigateToAgriculture?: () => void;
 }
 
-export const Services: React.FC<ServicesProps> = ({ onOpenDetails }) => {
+export const Services: React.FC<ServicesProps> = ({ onOpenDetails, onNavigateToAgriculture }) => {
   return (
     <section id="services" className="py-20 lg:py-28 bg-[#F4F8FC]/60 border-b border-slate-200/60 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -45,6 +46,7 @@ export const Services: React.FC<ServicesProps> = ({ onOpenDetails }) => {
               key={service.id}
               service={service}
               onOpenDetails={onOpenDetails}
+              onNavigateToAgriculture={onNavigateToAgriculture}
               index={idx}
             />
           ))}

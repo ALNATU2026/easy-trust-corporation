@@ -6,10 +6,16 @@ import { motion } from 'motion/react';
 interface ServiceCardProps {
   service: ServiceItem;
   onOpenDetails: (service: ServiceItem) => void;
+  onNavigateToAgriculture?: () => void;
   index?: number;
 }
 
-export const ServiceCard: React.FC<ServiceCardProps> = ({ service, onOpenDetails, index = 0 }) => {
+export const ServiceCard: React.FC<ServiceCardProps> = ({
+  service,
+  onOpenDetails,
+  onNavigateToAgriculture,
+  index = 0,
+}) => {
   // Map icon name to Lucide Icon
   const getIcon = () => {
     switch (service.sectorCode) {
@@ -107,7 +113,22 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, onOpenDetails
         </div>
 
         {/* Action Button: Learn More */}
-        <div className="pt-2">
+        <div className="pt-2 flex flex-col gap-2">
+          {service.sectorCode === 'agri' && onNavigateToAgriculture && (
+            <button
+              type="button"
+              id="view-agri-page-btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                onNavigateToAgriculture();
+              }}
+              className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#0A9F3D] to-[#20C84A] hover:from-[#087A32] hover:to-[#0A9F3D] transition-all shadow-xs cursor-pointer"
+            >
+              <Sprout className="w-3.5 h-3.5" />
+              <span>Explore Agriculture Page</span>
+            </button>
+          )}
+
           <motion.button
             whileTap={{ scale: 0.97 }}
             id={`learn-more-btn-${service.id}`}

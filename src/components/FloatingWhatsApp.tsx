@@ -1,10 +1,36 @@
 import React, { useState } from 'react';
 import { getWhatsAppUrl, getTelUrl } from '../data/config';
 import { MessageSquare, Phone } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useAnimationControls } from 'motion/react';
+import { playFloatingActionBeep } from '../utils/audio';
 
 export const FloatingWhatsApp: React.FC = () => {
   const [showTooltip, setShowTooltip] = useState(false);
+  const callControls = useAnimationControls();
+  const whatsAppControls = useAnimationControls();
+
+  // Momentary bounce/pop animation on tap
+  const handleCallTap = () => {
+    callControls.start({
+      scale: [0.85, 1.25, 0.94, 1.06, 1],
+      transition: {
+        duration: 0.42,
+        times: [0, 0.35, 0.65, 0.85, 1],
+        ease: 'easeOut',
+      },
+    });
+  };
+
+  const handleWhatsAppTap = () => {
+    whatsAppControls.start({
+      scale: [0.85, 1.28, 0.92, 1.08, 1],
+      transition: {
+        duration: 0.45,
+        times: [0, 0.35, 0.65, 0.85, 1],
+        ease: 'easeOut',
+      },
+    });
+  };
 
   return (
     <motion.div
@@ -16,11 +42,14 @@ export const FloatingWhatsApp: React.FC = () => {
     >
       {/* Mobile Floating Quick Call Button */}
       <motion.a
+        animate={callControls}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
+        onTap={handleCallTap}
         id="floating-call-mobile-btn"
         href={getTelUrl()}
-        className="sm:hidden flex items-center justify-center w-12 h-12 rounded-full bg-[#004AAD] text-white shadow-lg shadow-blue-900/30 hover:bg-[#062B5C] transition-all"
+        onMouseEnter={playFloatingActionBeep}
+        className="sm:hidden flex items-center justify-center w-12 h-12 rounded-full bg-[#004AAD] text-white shadow-lg shadow-blue-900/30 hover:bg-[#062B5C] transition-colors"
         aria-label="Direct Phone Call"
       >
         <Phone className="w-5 h-5 text-white" />
@@ -44,15 +73,20 @@ export const FloatingWhatsApp: React.FC = () => {
         </AnimatePresence>
 
         <motion.a
+          animate={whatsAppControls}
           whileHover={{ scale: 1.12 }}
           whileTap={{ scale: 0.92 }}
+          onTap={handleWhatsAppTap}
           id="floating-whatsapp-btn"
           href={getWhatsAppUrl()}
           target="_blank"
           rel="noopener noreferrer"
-          onMouseEnter={() => setShowTooltip(true)}
+          onMouseEnter={() => {
+            setShowTooltip(true);
+            playFloatingActionBeep();
+          }}
           onMouseLeave={() => setShowTooltip(false)}
-          className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-[#20C84A] text-white shadow-xl shadow-emerald-900/25 hover:bg-[#0A9F3D] transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-emerald-300/60"
+          className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-[#20C84A] text-white shadow-xl shadow-emerald-900/25 hover:bg-[#0A9F3D] transition-colors duration-300 focus:outline-none focus:ring-4 focus:ring-emerald-300/60"
           aria-label="Chat with us on WhatsApp"
         >
           {/* Subtle pulse ring animation */}

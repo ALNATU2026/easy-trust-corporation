@@ -3,13 +3,21 @@ import { EtcLogo } from './EtcLogo';
 import { COMPANY_CONFIG, getWhatsAppUrl, getTelUrl } from '../data/config';
 import { Menu, X, Phone, MessageSquare, Search, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { playMenuHoverSound, playCtaHoverSound } from '../utils/audio';
 
 interface HeaderProps {
   onOpenSearch: () => void;
   activeSection: string;
+  currentPage?: 'home' | 'agriculture';
+  onNavigate?: (page: 'home' | 'agriculture', targetSection?: string) => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onOpenSearch, activeSection }) => {
+export const Header: React.FC<HeaderProps> = ({
+  onOpenSearch,
+  activeSection,
+  currentPage = 'home',
+  onNavigate,
+}) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -26,14 +34,27 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch, activeSection }) =
   }, []);
 
   const navItems = [
-    { label: 'Home', href: '#home', id: 'home' },
-    { label: 'About Us', href: '#about', id: 'about' },
-    { label: 'Services', href: '#services', id: 'services' },
-    { label: 'Our Impact', href: '#impact', id: 'impact' },
-    { label: 'Why Choose Us', href: '#why-choose-us', id: 'why-choose-us' },
-    { label: 'News & Updates', href: '#news', id: 'news' },
-    { label: 'Contact Us', href: '#contact', id: 'contact' },
+    { label: 'Home', href: '#home', id: 'home', page: 'home' },
+    { label: 'Agriculture', href: '#agriculture', id: 'agriculture', page: 'agriculture' },
+    { label: 'About Us', href: '#about', id: 'about', page: 'home' },
+    { label: 'Services', href: '#services', id: 'services', page: 'home' },
+    { label: 'Our Impact', href: '#impact', id: 'impact', page: 'home' },
+    { label: 'Why Choose Us', href: '#why-choose-us', id: 'why-choose-us', page: 'home' },
+    { label: 'News & Updates', href: '#news', id: 'news', page: 'home' },
+    { label: 'Contact Us', href: '#contact', id: 'contact', page: 'home' },
   ];
+
+  const handleNavItemClick = (e: React.MouseEvent, item: typeof navItems[0]) => {
+    if (item.page === 'agriculture') {
+      e.preventDefault();
+      if (onNavigate) onNavigate('agriculture');
+    } else {
+      if (currentPage === 'agriculture') {
+        e.preventDefault();
+        if (onNavigate) onNavigate('home', item.id);
+      }
+    }
+  };
 
   return (
     <>
@@ -88,6 +109,12 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch, activeSection }) =
             <a
               id="header-brand-logo-link"
               href="#home"
+              onClick={(e) => {
+                if (currentPage === 'agriculture') {
+                  e.preventDefault();
+                  if (onNavigate) onNavigate('home');
+                }
+              }}
               className="focus:outline-none focus:ring-2 focus:ring-[#004AAD] rounded-lg transition-transform hover:scale-[1.01]"
               aria-label="Easy Trust Corporation Homepage"
             >
@@ -97,13 +124,17 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch, activeSection }) =
             {/* Desktop Navigation Links */}
             <nav id="desktop-nav-menu" className="hidden lg:flex items-center gap-1 xl:gap-2" aria-label="Main Navigation">
               {navItems.map((item) => {
-                const isActive = activeSection === item.id;
+                const isActive = currentPage === 'agriculture'
+                  ? item.id === 'agriculture'
+                  : activeSection === item.id && item.id !== 'agriculture';
                 return (
                   <a
                     key={item.id}
                     id={`nav-link-${item.id}`}
                     href={item.href}
-                    className={`px-3 py-2 text-sm font-semibold rounded-md transition-all duration-200 ${
+                    onClick={(e) => handleNavItemClick(e, item)}
+                    onMouseEnter={playMenuHoverSound}
+                    className={`px-3 py-2 text-sm font-semibold rounded-md transition-all duration-200 cursor-pointer ${
                       isActive
                         ? 'text-[#004AAD] bg-blue-50/80 font-bold'
                         : 'text-slate-700 hover:text-[#004AAD] hover:bg-slate-50'
@@ -132,6 +163,13 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch, activeSection }) =
                 whileTap={{ scale: 0.96 }}
                 id="header-get-in-touch-cta"
                 href="#contact"
+                onClick={(e) => {
+                  if (currentPage === 'agriculture') {
+                    e.preventDefault();
+                    if (onNavigate) onNavigate('home', 'contact');
+                  }
+                }}
+                onMouseEnter={playCtaHoverSound}
                 className="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-[#0A9F3D] to-[#20C84A] hover:from-[#087A32] hover:to-[#0A9F3D] rounded-full shadow-sm hover:shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-[#20C84A] focus:ring-offset-2"
               >
                 <span>Get In Touch</span>
@@ -175,23 +213,43 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch, activeSection }) =
               className="lg:hidden bg-white border-t border-slate-200 shadow-xl overflow-hidden"
             >
               <div className="px-4 pt-3 pb-6 space-y-1">
-                {navItems.map((item) => (
-                  <a
-                    key={item.id}
-                    id={`mobile-nav-link-${item.id}`}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block px-4 py-3 text-base font-semibold text-slate-800 rounded-lg hover:bg-slate-50 hover:text-[#004AAD]"
-                  >
-                    {item.label}
-                  </a>
-                ))}
+                {navItems.map((item) => {
+                  const isActive = currentPage === 'agriculture'
+                    ? item.id === 'agriculture'
+                    : activeSection === item.id && item.id !== 'agriculture';
+                  return (
+                    <a
+                      key={item.id}
+                      id={`mobile-nav-link-${item.id}`}
+                      href={item.href}
+                      onMouseEnter={playMenuHoverSound}
+                      onClick={(e) => {
+                        setMobileMenuOpen(false);
+                        handleNavItemClick(e, item);
+                      }}
+                      className={`block px-4 py-3 text-base font-semibold rounded-lg transition-colors ${
+                        isActive
+                          ? 'bg-blue-50 text-[#004AAD] font-bold'
+                          : 'text-slate-800 hover:bg-slate-50 hover:text-[#004AAD]'
+                      }`}
+                    >
+                      {item.label}
+                    </a>
+                  );
+                })}
 
                 <div className="pt-4 border-t border-slate-100 flex flex-col gap-3">
                   <a
                     id="mobile-menu-cta-contact"
                     href="#contact"
-                    onClick={() => setMobileMenuOpen(false)}
+                    onMouseEnter={playCtaHoverSound}
+                    onClick={(e) => {
+                      setMobileMenuOpen(false);
+                      if (currentPage === 'agriculture') {
+                        e.preventDefault();
+                        if (onNavigate) onNavigate('home', 'contact');
+                      }
+                    }}
                     className="w-full flex items-center justify-center gap-2 py-3 px-4 font-bold text-white bg-gradient-to-r from-[#0A9F3D] to-[#20C84A] rounded-xl shadow-sm"
                   >
                     <span>Get In Touch</span>

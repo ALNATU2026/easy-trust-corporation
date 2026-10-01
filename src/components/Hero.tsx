@@ -5,9 +5,10 @@ import { motion } from 'motion/react';
 
 interface HeroProps {
   onSelectSector?: (sectorId: string) => void;
+  onNavigateToAgriculture?: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onSelectSector }) => {
+export const Hero: React.FC<HeroProps> = ({ onSelectSector, onNavigateToAgriculture }) => {
   const sectorPills = [
     { id: 'agri', label: 'Agriculture', icon: Sprout, color: 'text-emerald-300', bg: 'bg-emerald-950/60 hover:bg-emerald-900/80', border: 'border-emerald-400/50' },
     { id: 'trans', label: 'Transportation', icon: Truck, color: 'text-sky-300', bg: 'bg-blue-950/60 hover:bg-blue-900/80', border: 'border-sky-400/50' },
@@ -175,9 +176,16 @@ export const Hero: React.FC<HeroProps> = ({ onSelectSector }) => {
                         key={pill.id}
                         whileHover={{ scale: 1.05, y: -2 }}
                         whileTap={{ scale: 0.96 }}
-                        href={`#services`}
-                        onClick={() => onSelectSector && onSelectSector(pill.id)}
-                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border backdrop-blur-md ${pill.bg} ${pill.border} ${pill.color} transition-colors duration-200 shadow-sm`}
+                        href={pill.id === 'agri' ? '#agriculture' : '#services'}
+                        onClick={(e) => {
+                          if (pill.id === 'agri' && onNavigateToAgriculture) {
+                            e.preventDefault();
+                            onNavigateToAgriculture();
+                          } else if (onSelectSector) {
+                            onSelectSector(pill.id);
+                          }
+                        }}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border backdrop-blur-md ${pill.bg} ${pill.border} ${pill.color} transition-colors duration-200 shadow-sm cursor-pointer`}
                       >
                         <Icon className="w-3.5 h-3.5" />
                         <span>{pill.label}</span>
