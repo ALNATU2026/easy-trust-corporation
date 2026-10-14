@@ -18,21 +18,23 @@ import {
 interface FooterProps {
   onOpenPrivacy: () => void;
   onOpenTerms: () => void;
+  onNavigate?: (page: 'home' | 'agriculture' | 'trustpay' | 'trustpay-services', targetSection?: string) => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenPrivacy, onOpenTerms }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenPrivacy, onOpenTerms, onNavigate }) => {
   const quickLinks = [
-    { label: 'Home', href: '#home' },
-    { label: 'About Us', href: '#about' },
-    { label: 'Services', href: '#services' },
-    { label: 'Our Impact', href: '#impact' },
-    { label: 'Why Choose Us', href: '#why-choose-us' },
-    { label: 'News & Updates', href: '#news' },
-    { label: 'Contact Us', href: '#contact' },
+    { label: 'Home', href: '#home', page: 'home' },
+    { label: 'Trustpay App', href: '#trustpay', page: 'trustpay' },
+    { label: 'Agriculture Division', href: '#agriculture', page: 'agriculture' },
+    { label: 'Services', href: '#services', page: 'home' },
+    { label: 'About Us', href: '#about', page: 'home' },
+    { label: 'Our Impact', href: '#impact', page: 'home' },
+    { label: 'Contact Us', href: '#contact', page: 'home' },
   ];
 
   const serviceLinks = [
-    { label: 'Agriculture', href: '#services' },
+    { label: 'Trustpay FinTech App', page: 'trustpay', href: '#trustpay' },
+    { label: 'Agriculture & Crop Farms', page: 'agriculture', href: '#agriculture' },
     { label: 'Transportation', href: '#services' },
     { label: 'Procurement & Logistics', href: '#services' },
     { label: 'Real Estate', href: '#services' },
@@ -47,7 +49,17 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPrivacy, onOpenTerms }) =>
           
           {/* Column 1: Brand Info (5 cols) */}
           <div className="lg:col-span-5 space-y-5">
-            <a href="#home" className="inline-block focus:outline-none" aria-label="Easy Trust Corporation">
+            <a
+              href="#home"
+              onClick={(e) => {
+                if (onNavigate) {
+                  e.preventDefault();
+                  onNavigate('home');
+                }
+              }}
+              className="inline-block focus:outline-none cursor-pointer"
+              aria-label="Easy Trust Corporation"
+            >
               <EtcLogo variant="white" />
             </a>
 
@@ -118,7 +130,13 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPrivacy, onOpenTerms }) =>
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="hover:text-emerald-400 transition-colors inline-flex items-center gap-1.5"
+                    onClick={(e) => {
+                      if (link.page && onNavigate) {
+                        e.preventDefault();
+                        onNavigate(link.page as any);
+                      }
+                    }}
+                    className="hover:text-emerald-400 transition-colors inline-flex items-center gap-1.5 cursor-pointer"
                   >
                     <ChevronRight className="w-3 h-3 text-slate-500" />
                     <span>{link.label}</span>
@@ -138,7 +156,13 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPrivacy, onOpenTerms }) =>
                 <li key={service.label}>
                   <a
                     href={service.href}
-                    className="hover:text-emerald-400 transition-colors inline-flex items-center gap-1.5"
+                    onClick={(e) => {
+                      if (service.page && onNavigate) {
+                        e.preventDefault();
+                        onNavigate(service.page as any);
+                      }
+                    }}
+                    className="hover:text-emerald-400 transition-colors inline-flex items-center gap-1.5 cursor-pointer"
                   >
                     <ChevronRight className="w-3 h-3 text-emerald-500" />
                     <span>{service.label}</span>

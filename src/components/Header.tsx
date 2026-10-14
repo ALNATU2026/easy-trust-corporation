@@ -8,8 +8,8 @@ import { playMenuHoverSound, playCtaHoverSound } from '../utils/audio';
 interface HeaderProps {
   onOpenSearch: () => void;
   activeSection: string;
-  currentPage?: 'home' | 'agriculture';
-  onNavigate?: (page: 'home' | 'agriculture', targetSection?: string) => void;
+  currentPage?: 'home' | 'agriculture' | 'trustpay' | 'trustpay-services';
+  onNavigate?: (page: 'home' | 'agriculture' | 'trustpay' | 'trustpay-services', targetSection?: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -35,9 +35,10 @@ export const Header: React.FC<HeaderProps> = ({
 
   const navItems = [
     { label: 'Home', href: '#home', id: 'home', page: 'home' },
+    { label: 'Trustpay', href: '#trustpay', id: 'trustpay', page: 'trustpay' },
     { label: 'Agriculture', href: '#agriculture', id: 'agriculture', page: 'agriculture' },
-    { label: 'About Us', href: '#about', id: 'about', page: 'home' },
     { label: 'Services', href: '#services', id: 'services', page: 'home' },
+    { label: 'About Us', href: '#about', id: 'about', page: 'home' },
     { label: 'Our Impact', href: '#impact', id: 'impact', page: 'home' },
     { label: 'Why Choose Us', href: '#why-choose-us', id: 'why-choose-us', page: 'home' },
     { label: 'News & Updates', href: '#news', id: 'news', page: 'home' },
@@ -48,8 +49,11 @@ export const Header: React.FC<HeaderProps> = ({
     if (item.page === 'agriculture') {
       e.preventDefault();
       if (onNavigate) onNavigate('agriculture');
+    } else if (item.page === 'trustpay') {
+      e.preventDefault();
+      if (onNavigate) onNavigate('trustpay');
     } else {
-      if (currentPage === 'agriculture') {
+      if (currentPage !== 'home') {
         e.preventDefault();
         if (onNavigate) onNavigate('home', item.id);
       }
@@ -110,7 +114,7 @@ export const Header: React.FC<HeaderProps> = ({
               id="header-brand-logo-link"
               href="#home"
               onClick={(e) => {
-                if (currentPage === 'agriculture') {
+                if (currentPage !== 'home') {
                   e.preventDefault();
                   if (onNavigate) onNavigate('home');
                 }
@@ -124,9 +128,12 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Desktop Navigation Links */}
             <nav id="desktop-nav-menu" className="hidden lg:flex items-center gap-1 xl:gap-2" aria-label="Main Navigation">
               {navItems.map((item) => {
-                const isActive = currentPage === 'agriculture'
-                  ? item.id === 'agriculture'
-                  : activeSection === item.id && item.id !== 'agriculture';
+                const isActive =
+                  currentPage === item.id ||
+                  (currentPage === 'home' &&
+                    activeSection === item.id &&
+                    item.id !== 'agriculture' &&
+                    item.id !== 'trustpay');
                 return (
                   <a
                     key={item.id}
@@ -164,7 +171,7 @@ export const Header: React.FC<HeaderProps> = ({
                 id="header-get-in-touch-cta"
                 href="#contact"
                 onClick={(e) => {
-                  if (currentPage === 'agriculture') {
+                  if (currentPage !== 'home') {
                     e.preventDefault();
                     if (onNavigate) onNavigate('home', 'contact');
                   }
@@ -214,9 +221,12 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <div className="px-4 pt-3 pb-6 space-y-1">
                 {navItems.map((item) => {
-                  const isActive = currentPage === 'agriculture'
-                    ? item.id === 'agriculture'
-                    : activeSection === item.id && item.id !== 'agriculture';
+                  const isActive =
+                    currentPage === item.id ||
+                    (currentPage === 'home' &&
+                      activeSection === item.id &&
+                      item.id !== 'agriculture' &&
+                      item.id !== 'trustpay');
                   return (
                     <a
                       key={item.id}
@@ -245,7 +255,7 @@ export const Header: React.FC<HeaderProps> = ({
                     onMouseEnter={playCtaHoverSound}
                     onClick={(e) => {
                       setMobileMenuOpen(false);
-                      if (currentPage === 'agriculture') {
+                      if (currentPage !== 'home') {
                         e.preventDefault();
                         if (onNavigate) onNavigate('home', 'contact');
                       }
